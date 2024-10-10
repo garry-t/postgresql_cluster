@@ -316,3 +316,9 @@
 
 - ansible.builtin.include_tasks: ../tasks/dnsmasq.yml
   when: consul_dnsmasq_enable | bool
+
+- ansible.builtin.include_tasks: ../tasks/systemd-resolved.yml
+  when:
+    - consul_enable_systemd_resolved | bool
+    - ansible_os_family == "Debian"
+    - ansible_distribution_version is version("22.04", ">=")

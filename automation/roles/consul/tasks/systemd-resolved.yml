@@ -1,0 +1,28 @@
+- name: Ensure systemd-resolved configuration directory exists
+  file:
+    path: /etc/systemd/resolved.conf.d
+    state: directory
+    mode: '0755'
+
+- name: Configure systemd-resolved to use Consul DNS
+  copy:
+    dest: /etc/systemd/resolved.conf.d/consul.conf
+    content: |
+      [Resolve]
+      DNS=127.0.0.1:8600
+      DNSSEC=false
+      Domains=~consul
+    mode: '0644'
+
+- name: Ensure DNSStubListener is enabled in resolved.conf
+  lineinfile:
+    path: /etc/systemd/resolved.conf
+    regexp: '^#?DNSStubListener=.*'
+    line: 'DNSStubListener=yes'
+    state: present
+    backup: yes
+
+- name: Restart systemd-resolved service
+  systemd:
+    name: systemd-resolved
+    state: restarted

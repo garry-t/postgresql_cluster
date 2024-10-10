@@ -217,6 +217,7 @@ auto_encrypt:
   enabled: false
 
 ## DNS
+consul_enable_systemd_resolved: "{{ lookup('env', 'CONSUL_SYSTEMDRESOLVED_ENABLE') | default(false, true) }}"
 consul_delegate_datacenter_dns: "{{ lookup('env', 'CONSUL_DELEGATE_DATACENTER_DNS') | default(false, true) }}"
 consul_dnsmasq_enable: "{{ lookup('env', 'CONSUL_DNSMASQ_ENABLE') | default(false, true) }}"
 consul_dnsmasq_bind_interfaces: false
